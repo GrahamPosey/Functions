@@ -1,0 +1,27 @@
+copado -p 'Cloning the repository' 
+mkdir MetadataRepo 
+cd MetadataRepo 
+git clone "$giturl" .
+cd ..
+copado -p 'Creating SFDX Project' 
+sfdx force:project:create -n SourceProject
+copado -p 'Cloning Metadata to Source Project'
+cd SourceProject
+mkdir src
+cd src
+echo '<?xml version="1.0" encoding="UTF-8"?>' > package.xml
+echo '<Package xmlns="http://soap.sforce.com/2006/04/metadata">' >> package.xml
+echo '<types>' >> package.xml
+echo '<members>*</members>' >> package.xml
+echo '<name>CustomObject</name>' >> package.xml
+echo '</types>' >> package.xml
+echo '<version>52.0</version>' >> package.xml
+echo '</Package>' >> package.xml
+echo "before cat"
+cat package.xml
+echo "after cat"
+cd ../..
+cp -a MetadataRepo/objects SourceProject/src/
+#cp -a MetadataRepo/* SourceProject/src/
+cd SourceProject
+sfdx force:mdapi:convert -r src/ -d force-app/
