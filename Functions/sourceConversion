@@ -1,7 +1,7 @@
 copado -p 'Cloning the repository' 
 mkdir MetadataRepo 
 cd MetadataRepo 
-git clone "$giturl" .
+git clone "$metadataRepo" .
 cd ..
 copado -p 'Creating SFDX Project' 
 sfdx force:project:create -n SourceProject
@@ -25,3 +25,16 @@ cp -a MetadataRepo/objects SourceProject/src/
 #cp -a MetadataRepo/* SourceProject/src/
 cd SourceProject
 sfdx force:mdapi:convert -r src/ -d force-app/
+#rmdir src
+#rm package.xml
+git config --global user.email "$sourceRepoEmail"
+git config --global user.name "$sourceRepoUName"
+ls force-app/main/default/objects/Bicycle__c
+copado -p 'Initializing and Setting Repo'
+git init
+git add .
+copado -p 'Commiting Source Project'
+git commit -m 'Updated Source Format'
+git remote add origin $sourceRepo
+copado -p 'Pushing to Source Project'
+git push origin master
