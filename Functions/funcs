@@ -1,0 +1,20 @@
+(sleep 10; echo y;) | sfdx plugins:install sfpowerkit
+echo Sfpowerkit Installed...
+echo RESULTS > /tmp/results.txt
+i=1
+while [ "$i" -le "$orgNumber" ]; 
+do
+	creds=$(echo $InputString | cut -d '}' -f $i) 
+    preName=$(echo $creds | cut -d ':' -f 1)
+    name=$(echo "${preName:1}")
+    password=$(echo $creds | cut -d ':' -f 2)
+    security=$(echo $creds | cut -d ':' -f 3)
+    sfdx sfpowerkit:auth:login -u $name -p $password -s $security
+	echo "Authenticating org $i"...
+	sfdx force:package:install -p $packageId -u $name -k key123 >> /tmp/results.txt
+    #send output to a file
+	echo "Started installation on org $i."
+  	i=$(($i + 1))
+done
+copado --uploadfile /tmp/results.txt
+echo "Job Complete."
