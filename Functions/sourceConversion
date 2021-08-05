@@ -39,12 +39,11 @@ cp -a MetadataRepo/* SourceProject/src/
 #cp -a MetadataRepo/* SourceProject/src/
 cd SourceProject
 sfdx force:mdapi:convert -r src/ -d force-app/
-#rm -rf src
-#rm package.xml
+rm -rf src
 git config --global user.email "$sourceRepoEmail"
 git config --global user.name "$sourceRepoUName"
 ls force-app/main/default/objects/Bicycle__c
-copado -p 'Initializing and Setting Repo'
+copado -p 'Initializing and Setting Source Project Repo'
 git init
 git add .
 copado -p 'Commiting Source Project'
